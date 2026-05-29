@@ -29,7 +29,7 @@
 2. **Deploy this stack** — follow [guide.md](guide.md) for the full console walkthrough, or use the CFN shortcut:
    ```bash
    aws cloudformation deploy \
-     --template-file template.yaml \
+     --template-file cfn/template.yaml \
      --stack-name logistics \
      --capabilities CAPABILITY_IAM \
      --parameter-overrides VpcStackName=VPCs
@@ -55,7 +55,7 @@ aws cloudformation delete-stack --stack-name logistics
 | File | Purpose |
 |---|---|
 | `architecture.png` / `architecture.drawio` | System diagram |
-| `template.yaml` | CloudFormation template — full stack |
+| `cfn/template.yaml` | CloudFormation template — full stack |
 | `guide.md` | Full console walkthrough |
 | `app/app.py` | Flask application — shipment tracking with 5 statuses |
 | `app/schema.sql` | PostgreSQL schema — shipments table |
