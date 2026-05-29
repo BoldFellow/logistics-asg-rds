@@ -25,10 +25,12 @@ Parameters:
       construct the Fn::ImportValue keys for subnets and VPC ID.
 
   BastionSecurityGroupId:
-    Type: AWS::EC2::SecurityGroup::Id
+    Type: String
+    Default: ""
     Description: >
-      SG of the bastion host. Granted ingress to RDS:5432 so you can run
-      schema.sql via psql after the stack is up.
+      Optional. SG of an existing bastion host. If provided, grants ingress to
+      RDS:5432 from that SG. Leave empty to skip (schema bootstrap uses SSM Run
+      Command instead).
 
   ArtifactBucket:
     Type: String
@@ -137,6 +139,7 @@ Metadata:
 Conditions:
   ShouldCreateS3Endpoint: !Equals [!Ref CreateS3GatewayEndpoint, "true"]
   ShouldCreateInterfaceEndpoints: !Equals [!Ref CreateInterfaceEndpoints, "true"]
+  HasBastionSG: !Not [!Equals [!Ref BastionSecurityGroupId, ""]]
 
 # ============================================================================
 # RESOURCES
@@ -235,6 +238,7 @@ Resources:
 
   RdsFromBastionIngress:
     Type: AWS::EC2::SecurityGroupIngress
+    Condition: HasBastionSG
     Properties:
       GroupId: !Ref RdsSecurityGroup
       IpProtocol: tcp
